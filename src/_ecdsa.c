@@ -10,6 +10,7 @@ void signZZ_p(Sig * sig, char * msg, mpz_t d, mpz_t k, const CurveZZ_p * curve) 
     PointZZ_p R;
     pointZZ_pMul(&R, curve->g, k, curve);
     mpz_init_set(sig->r, R.x);
+    mpz_init_set(sig->y, R.y);
     mpz_mod(sig->r, sig->r, curve->q);
 
     // convert digest to integer (digest is computed as hex in ecdsa.py)
@@ -84,11 +85,13 @@ static PyObject * _ecdsa_sign(PyObject *self, PyObject *args) {
 
     char * resultR = mpz_get_str(NULL, 10, sig.r);
     char * resultS = mpz_get_str(NULL, 10, sig.s);
-    mpz_clears(sig.r, sig.s, privKey, nonce, NULL);
+    char * resulty = mpz_get_str(NULL, 10, sig.y);
+    mpz_clears(sig.r, sig.s, sig.y, privKey, nonce, NULL);
 
-    PyObject * ret = Py_BuildValue("ss", resultR, resultS);
+    PyObject * ret = Py_BuildValue("sss", resultR, resultS, resulty);
     free(resultR);
     free(resultS);
+    free(resulty);
     return ret;
 }
 

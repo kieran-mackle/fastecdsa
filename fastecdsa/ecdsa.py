@@ -51,7 +51,7 @@ def sign(msg: MsgTypes, d: int, curve: Curve = P256, hashfunc=sha256, prehashed:
     else:
         hex_digest = hashfunc(msg_bytes(msg)).hexdigest()
 
-    r, s = _ecdsa.sign(
+    r, s, y = _ecdsa.sign(
         hex_digest,
         str(d),
         str(k),
@@ -62,7 +62,7 @@ def sign(msg: MsgTypes, d: int, curve: Curve = P256, hashfunc=sha256, prehashed:
         str(curve.gx),
         str(curve.gy)
     )
-    return int(r), int(s)
+    return int(r), int(s), int(y)
 
 
 def verify(

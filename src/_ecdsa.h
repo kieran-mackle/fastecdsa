@@ -11,7 +11,7 @@
 #include "curveMath.h"
 
 typedef struct {
-    mpz_t r, s;
+    mpz_t r, s, y;
 } Sig;
 
 void signZZ_p(Sig * sig, char * msg, mpz_t d, mpz_t k, const CurveZZ_p * curve);
